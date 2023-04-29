@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}">
+
+<div class="main-page">
+	<div class="headerList">
+		<h1>To-do List</h1>
+	</div>
+	<div class="tasks">
+
+
+	</div>
+
+	<div class="footer">
+		<div class="pagination">
+			<button class="before" id="before-page"><</button>
+				<div class="pagina">
+	
+				</div>
+			<button class="next" id="next-page">></button>
+		</div>
+		<div class="add_todo">
+			<button class="add_task" id="add_task">ADD</button>
+		</div>
+	</div>
+
+		<dialog id="windowModal">
+			<p class="close">X</p>
+			<form method="post" class="form-modal" action="/home">
+				<input type="text" placeholder="subject" name="subject" class="subject" required autocomplete="off">
+				<input type="text" placeholder="title" name="title" class="title" required>
+				<textarea name="description" id="" cols="30" rows="10" class="description"></textarea>
+				<input type="date" name="deadline" id="deadline" class="deadline" required>
+				<button type="submit" id="add_close">ADD</button>
+			</form>
+		</dialog>
+</div>
+<script type="text/javascript" src="{{url_for('static', filename='js/todo_clicks.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/modal_add_hk.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/loadHomeworks.js')}}"></script>
+{% endblock %}
