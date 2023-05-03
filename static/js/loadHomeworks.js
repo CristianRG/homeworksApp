@@ -133,7 +133,7 @@ beforePage.addEventListener('click', () => {
 
 function updateStatusPagina(){
     
-    if(index == MAX){
+    if(index+1 == MAX){
         buttonNext.disabled = true;
     }
     if(index+1 == MIN){

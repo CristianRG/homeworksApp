@@ -11,16 +11,16 @@
     <form action="/register/" method="post">
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>
-        <input type="text" class="form-control" id="username" aria-describedby="emailHelp" name="username" autocomplete="off">
+        <input type="text" class="form-control" id="username" aria-describedby="emailHelp" name="username" autocomplete="off" required>
         <div id="emailHelp" class="form-text">We'll never share your username with anyone else.</div>
       </div>
       <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+        <input type="password" class="form-control" id="exampleInputPassword1" name="password" required>
       </div>
     
       <div class="position-absolute top-90 start-50 translate-middle mt-1 bi bi-caret-down-fill" id="container-button">
-        <button type="submit" class="btn btn-primary">Sing up</button>
+        <button type="submit" class="btn btn-primary" id="button-singup">Sing up</button>
         
       </div>
       <p>¿Ya estas registrado? <a href="/login/">Inicia sesión aquí</a></p>
@@ -28,7 +28,7 @@
   </div>
 </div>
 
-
+<script type="text/javascript" src="{{url_for('static', filename='js/registerUser.js')}}"></script>
 
 {% endblock body %}
 

@@ -1,19 +1,25 @@
 import datetime
-from turtle import title
-from utils.convertToJson import convertToJsonHomework
+from utils.convertToJson import convertToJsonHomework, convertToJsonUsers
 from schemas.user_homework import User_Homework
-from flask import render_template, request, session, redirect, url_for, jsonify
+from flask import render_template, request, redirect, url_for, jsonify, flash
 from app import app, login_manager_app
-from listGenerator import generateList, sortList
 from schemas.user import User
 from schemas.homework import Homework
 from bd import db_instance
 from flask_login import login_required, login_user, current_user, logout_user
-from uuid_generate import generateUUID
-from sqlalchemy import select
+from utils.uuid_generate import generateUUID
+from dotenv import load_dotenv
+from os import environ
+
+load_dotenv()
+
+# obtenemos los valores de las variables de entorno
+DB_USER = environ.get('DB_USER')
+DB_HOST = environ.get('DB_HOST')
+DB_NAME = environ.get('DB_NAME')
 
 # configuramos nuevamente la aplicación para que pueda conctarse a la base de datos
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:@localhost/project"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://{}:@{}/{}".format(DB_USER, DB_HOST, DB_NAME)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -63,15 +69,15 @@ def login():
     if request.method == 'POST':    
         username = request.form['username']
         password = request.form['password']
+        query = User.query.filter(User.username == username).first()
         
-        if User.query.filter(User.username == username).first():
-            query = User.query.filter(User.username == username).first()
-            
-            if password == query.password:
+        try:
+            if query.password == password:
                 user = User(query.id_user, query.username, query.password)
                 login_user(user)
                 return redirect(url_for('home'))
-            print('Contraseña invalida')
+        except (AttributeError):
+            flash('Usuario o contraseña incorrectos. Intenta nuevamente.')
     
     return render_template('login.html')
 
@@ -84,19 +90,36 @@ def register():
         username = request.form['username']
         password = request.form['password']
         
-        if (username) and (len(password) > 8 and password.isspace() != True):
-            id_user = generateUUID()
-            new_user = User(id_user, username, password)
-            db_instance.session.add(new_user)
-            db_instance.session.commit()
+        query = db_instance.session.query(User).filter(User.username == username)
+        
+        try:
+            if query.username:
+                flash("El usuario ya existe")
+                return render_template("register.html")
             
+        except AttributeError as e:
+            print(username, password)
+            if  (username.isspace() == False) and len(username) >= 6 and len(password) >= 8 and password.isspace() == False:
+                id_user = generateUUID()
+                new_user = User(id_user, username, password)
+                db_instance.session.add(new_user)
+                db_instance.session.commit()
+                flash('Registrado exitosamente')
+                return redirect(url_for('login'))
+                
+            return render_template('register.html')
         
-        return redirect(url_for('login'))
         
-        
+        # if (username) and (len(password) > 8 and password.isspace() != True):
+        #     id_user = generateUUID()
+        #     new_user = User(id_user, username, password)
+        #     db_instance.session.add(new_user)
+        #     db_instance.session.commit()
+            # return redirect(url_for('login'))
+           
     return render_template('register.html')
 
-
+# --------------------- APIs
 
 @app.get('/api/v1/homeworks/')
 def get_homeworks_user():
@@ -111,6 +134,14 @@ def get_homeworks_user():
     
     return jsonify({'today': today, 'tomorrow': tomorrow})
 
+@app.get("/api/v1/users/")
+def get_users():
+    
+    users = db_instance.session.query(User).all()
+    UsersJson = convertToJsonUsers(users)
+    
+    return jsonify({"users": UsersJson})
+
 # por implementar ... ----------------------------------------------------------
 @app.route('/add/')
 @login_required
@@ -124,7 +155,7 @@ def add_toDo():
         db_instance.session.commit()
         return redirect(url_for('home'))
 
-@app.route('/edit/<int:id_course>/')
+@app.route('/edit/<string:id_course>/')
 def edit_course(id_course):
     return "Now you can edit the course with id same to {}".format(id_course)
 
@@ -139,6 +170,7 @@ def details(id_note):
 @app.route('/logout/')
 @login_required
 def logout():
+    query = db_instance.session.query(User).filter(User.id_user == 1)
     logout_user()
     return "You are logout!"
 

@@ -18,6 +18,23 @@ body{
     height: 70vh;
 }
 
+.main .messages_server {
+    position: absolute;
+    width: auto;
+    height: auto;
+    z-index: 5;
+    top: 30%;
+    left: 48%;
+    transform: translateX(-50%);
+}
+
+.messages_server li{
+    color: red;
+    font-size: 12px;
+    list-style: none;
+    opacity: 80%;
+}
+
 #container-form{
     padding: 4rem;
     background: white;
