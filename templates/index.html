@@ -27,7 +27,7 @@
 
 		<dialog id="windowModal">
 			<p class="close">X</p>
-			<form method="post" class="form-modal" action="/home">
+			<form method="post" class="form-modal" action="/add/">
 				<input type="text" placeholder="subject" name="subject" class="subject" required autocomplete="off">
 				<input type="text" placeholder="title" name="title" class="title" required>
 				<textarea name="description" id="" cols="30" rows="10" class="description"></textarea>
@@ -35,8 +35,19 @@
 				<button type="submit" id="add_close">ADD</button>
 			</form>
 		</dialog>
+
+		<dialog id="windowEdit">
+			<p class="close" id="close-edit">X</p>
+			<form method="post" class="form-modal" action="/edit/">
+				<input type="text" placeholder="subject" name="subject" class="subject" required autocomplete="off" id="subject">
+				<input type="text" placeholder="title" name="title" class="title" required id="title">
+				<textarea name="description" id="description" cols="30" rows="10" class="description"></textarea>
+				<input type="date" name="deadline" id="deadline" class="deadline" required min="{{today}}" value="{{today}}">
+				<button type="submit" id="add_close">Update</button>
+			</form>
+		</dialog>
 </div>
-<script type="text/javascript" src="{{url_for('static', filename='js/todo_clicks.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='js/modal_add_hk.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='js/loadHomeworks.js')}}"></script>
+<!-- <script async type="text/javascript" src="{{url_for('static', filename='js/todo_clicks.js')}}"></script> -->
 {% endblock %}

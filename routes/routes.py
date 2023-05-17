@@ -15,11 +15,15 @@ load_dotenv()
 
 # obtenemos los valores de las variables de entorno
 DB_USER = environ.get('DB_USER')
+DB_PASS = environ.get("DB_PASSWORD")
 DB_HOST = environ.get('DB_HOST')
 DB_NAME = environ.get('DB_NAME')
+DB_SSL_CER = environ.get("DB_SSL_CER")
+DB_SSL_KEY = environ.get("DB_SSL_KEY")
+
 
 # configuramos nuevamente la aplicación para que pueda conctarse a la base de datos
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://{}:@{}/{}".format(DB_USER, DB_HOST, DB_NAME)
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://{DB_USER}:{DB_PASS}@{DB_HOST}:3306/{DB_NAME}?ssl_cert=/{DB_SSL_CER}&ssl_key=/{DB_SSL_KEY}"
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -50,17 +54,17 @@ def home():
         description = request.form['description']
         deadline = request.form['deadline']
         id_task = generateUUID()
-        homework = Homework(id_task, subject, title, description, False)
+        homework = Homework(id_task, current_user.id_user, subject, title, description, False, datetime.date.today(), deadline)
         db_instance.session.add(homework)
         
         user_homework = User_Homework(generateUUID(),current_user.id_user, id_task, datetime.date.today(),deadline)
         db_instance.session.add(user_homework)
         db_instance.session.commit()
         
+        
 
         return redirect(url_for('home'))
-    
-    return render_template('index.html')
+    return render_template('index.html', today=datetime.date.today())
 
 # ruta para loggear a un usuario
 @app.route('/login/', methods=['POST', 'GET'])
@@ -98,24 +102,19 @@ def register():
                 return render_template("register.html")
             
         except AttributeError as e:
-            print(username, password)
-            if  (username.isspace() == False) and len(username) >= 6 and len(password) >= 8 and password.isspace() == False:
+            pass
+            
+        if (username.isspace() == False and len(username) >= 6 and len(password) >= 8 and password.isspace() == False):
                 id_user = generateUUID()
                 new_user = User(id_user, username, password)
                 db_instance.session.add(new_user)
                 db_instance.session.commit()
                 flash('Registrado exitosamente')
                 return redirect(url_for('login'))
-                
-            return render_template('register.html')
-        
-        
-        # if (username) and (len(password) > 8 and password.isspace() != True):
-        #     id_user = generateUUID()
-        #     new_user = User(id_user, username, password)
-        #     db_instance.session.add(new_user)
-        #     db_instance.session.commit()
-            # return redirect(url_for('login'))
+        else:
+            flash('Error en el formulario. Algunos campos fueron llenados incorrectamente.')
+            return render_template("register.html")
+            
            
     return render_template('register.html')
 
@@ -142,17 +141,36 @@ def get_users():
     
     return jsonify({"users": UsersJson})
 
+@app.get("/api/v1/homework/<string:id>")
+def get_homework(id):
+    # subquery = db_instance.session.query(User_Homework.id_homework).filter(User_Homework.id_user == current_user.id_user).subquery()
+    query = db_instance.session.query(Homework, User_Homework).join(User_Homework).filter(Homework.id_homework == id)
+    homework = convertToJsonHomework(query)
+    return jsonify(homework)
+
+@app.post("/api/v1/homework/<string:id>")
+def update_homework(id):
+    query = db_instance.session.query(Homework).update(Homework.title).where(Homework.id_homework == id).values(title = "updated")
+    return "Yes"
+
 # por implementar ... ----------------------------------------------------------
-@app.route('/add/')
+
+@app.post("/add/")
 @login_required
-def add_toDo():
-        id_homework = generateUUID()
-        homework = Homework(id_homework, 'English', 'You have to do five excercises', 'I dont know', False)
+def add_homework():
+        
+        subject = request.form['subject']
+        title = request.form['title']
+        description = request.form['description']
+        deadline = request.form['deadline']
+        id_task = generateUUID()
+        homework = Homework(id_task, subject, title, description, False)
         db_instance.session.add(homework)
-        db_instance.session.commit()
-        user_homework = User_Homework(generateUUID(),current_user.id_user, id_homework, datetime.date.today(), datetime.date.today()+ datetime.timedelta(days=1))
+        
+        user_homework = User_Homework(generateUUID(),current_user.id_user, id_task, datetime.date.today(),deadline)
         db_instance.session.add(user_homework)
         db_instance.session.commit()
+        
         return redirect(url_for('home'))
 
 @app.route('/edit/<string:id_course>/')

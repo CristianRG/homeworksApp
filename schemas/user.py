@@ -7,7 +7,7 @@ class User(db_instance.Model, UserMixin):
     id_user = db_instance.Column(db_instance.String(50), primary_key = True)
     username = db_instance.Column(db_instance.String(25), unique = True, nullable = False)
     password = db_instance.Column(db_instance.String(25), nullable = False)
-    user_homework = db_instance.relationship('User_Homework')
+    # user_homework = db_instance.relationship('User_Homework')
     
     
     def __init__(self, id_user, username, password):

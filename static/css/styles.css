@@ -227,3 +227,50 @@ h2{
 .form-modal textarea {
 	resize: none;
 }
+
+#windowEdit{
+	width: 40%;
+	height: auto;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: flex;
+	justify-content: center;
+	border: 2px solid rgba(3, 40, 247, 0.75);
+	border-radius: 3px;
+	visibility: hidden;
+	padding: 1rem;
+}
+
+#windowEdit::backdrop{
+	background-color: rgba(0,0,0,0.9);
+}
+
+#windowEdit .close {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#windowEdit .close:hover{
+	cursor: pointer;
+	color: red;
+}
+
+.form-modal{
+	/* width: 70%; */
+	/* display: flex; */
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	/* flex-wrap: nowrap; */ 
+	/* justify-content: center; */
+}
+
+.form-modal input, .form-modal textarea, .form-modal button {
+	grid-column: 2;
+}
+
+.form-modal textarea {
+	resize: none;
+}
