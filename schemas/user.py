@@ -1,4 +1,4 @@
-from schemas.user_homework import User_Homework
+# from schemas.user_homework import User_Homework
 from bd import db_instance
 from flask_login import UserMixin
 

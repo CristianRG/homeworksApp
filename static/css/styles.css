@@ -69,9 +69,10 @@ h2{
 }
 
 .To-do {
-	display: flex;
+	/* display: flex; */
+	flex-wrap: nowrap;
 	width: 90%;
-	height: 2rem;
+	height: auto;
 	background: rgb(255, 141, 48);
 	color: white;
 	align-items: center;

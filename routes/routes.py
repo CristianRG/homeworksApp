@@ -1,6 +1,6 @@
 import datetime
 from utils.convertToJson import convertToJsonHomework, convertToJsonUsers
-from schemas.user_homework import User_Homework
+
 from flask import render_template, request, redirect, url_for, jsonify, flash
 from app import app, login_manager_app
 from schemas.user import User
@@ -48,22 +48,6 @@ def index():
 @login_required
 def home():
     
-    if request.method == "POST":
-        subject = request.form['subject']
-        title = request.form['title']
-        description = request.form['description']
-        deadline = request.form['deadline']
-        id_task = generateUUID()
-        homework = Homework(id_task, current_user.id_user, subject, title, description, False, datetime.date.today(), deadline)
-        db_instance.session.add(homework)
-        
-        user_homework = User_Homework(generateUUID(),current_user.id_user, id_task, datetime.date.today(),deadline)
-        db_instance.session.add(user_homework)
-        db_instance.session.commit()
-        
-        
-
-        return redirect(url_for('home'))
     return render_template('index.html', today=datetime.date.today())
 
 # ruta para loggear a un usuario
@@ -123,15 +107,19 @@ def register():
 @app.get('/api/v1/homeworks/')
 def get_homeworks_user():
     
-    subquery = db_instance.session.query(User_Homework.id_homework).filter(User_Homework.id_user == current_user.id_user, User_Homework.deadline == datetime.date.today()).subquery()
-    homeworksToday = db_instance.session.query(Homework, User_Homework).join(User_Homework).filter(Homework.id_homework == subquery.c.id_homework)
+    homeworksToday = db_instance.session.query(Homework).filter(Homework.id_user == current_user.id_user, Homework.deadline == datetime.date.today())
     today = convertToJsonHomework(homeworksToday)
     
-    subquery = db_instance.session.query(User_Homework.id_homework).filter(User_Homework.id_user == current_user.id_user, User_Homework.deadline == datetime.date.today()+datetime.timedelta(days=1)).subquery()
-    homeworksTomorrow = db_instance.session.query(Homework, User_Homework).join(User_Homework).filter(Homework.id_homework == subquery.c.id_homework)
+    homeworksTomorrow = db_instance.session.query(Homework).filter(Homework.id_user == current_user.id_user, Homework.deadline == datetime.date.today()+datetime.timedelta(days=1))
     tomorrow = convertToJsonHomework(homeworksTomorrow)
     
-    return jsonify({'today': today, 'tomorrow': tomorrow})
+    homeworksFuture = db_instance.session.query(Homework).filter(Homework.id_user == current_user.id_user, Homework.deadline > datetime.date.today()+datetime.timedelta(days=1))
+    future = convertToJsonHomework(homeworksFuture)
+    
+    homeworksPast = db_instance.session.query(Homework).filter(Homework.id_user == current_user.id_user, Homework.deadline < datetime.date.today())
+    past = convertToJsonHomework(homeworksPast)
+    
+    return jsonify({'today': today, 'tomorrow': tomorrow, "future": future, "past":past})
 
 @app.get("/api/v1/users/")
 def get_users():
@@ -143,15 +131,15 @@ def get_users():
 
 @app.get("/api/v1/homework/<string:id>")
 def get_homework(id):
-    # subquery = db_instance.session.query(User_Homework.id_homework).filter(User_Homework.id_user == current_user.id_user).subquery()
-    query = db_instance.session.query(Homework, User_Homework).join(User_Homework).filter(Homework.id_homework == id)
+    
+    query = db_instance.session.query(Homework).filter(Homework.id_homework == id, Homework.id_user == current_user.id_user)
     homework = convertToJsonHomework(query)
+        
     return jsonify(homework)
 
 @app.post("/api/v1/homework/<string:id>")
 def update_homework(id):
-    query = db_instance.session.query(Homework).update(Homework.title).where(Homework.id_homework == id).values(title = "updated")
-    return "Yes"
+   return "Hey"
 
 # por implementar ... ----------------------------------------------------------
 
@@ -164,18 +152,34 @@ def add_homework():
         description = request.form['description']
         deadline = request.form['deadline']
         id_task = generateUUID()
-        homework = Homework(id_task, subject, title, description, False)
+        homework = Homework(id_task, current_user.id_user, subject, title, description, False, datetime.date.today(), deadline)
         db_instance.session.add(homework)
         
-        user_homework = User_Homework(generateUUID(),current_user.id_user, id_task, datetime.date.today(),deadline)
-        db_instance.session.add(user_homework)
         db_instance.session.commit()
         
         return redirect(url_for('home'))
 
-@app.route('/edit/<string:id_course>/')
-def edit_course(id_course):
-    return "Now you can edit the course with id same to {}".format(id_course)
+@app.post('/edit/')
+def edit_course():
+    id_homework = request.form['id_homework']
+    subject = request.form['subject']
+    title = request.form['title']
+    description = request.form['description']
+    deadline = request.form['deadline']
+    
+    query = tuple(db_instance.session.query(Homework).filter(Homework.id_user == current_user.id_user, Homework.id_homework == id_homework))
+    homework = query[0]
+    
+    homework.subject = subject
+    homework.title = title
+    homework.description = description
+    homework.deadline = deadline
+    
+    db_instance.session.add(homework)
+    db_instance.session.commit()
+    
+    flash('Updated!')
+    return redirect(url_for('home'))
 
 @app.route('/delete/<int:id_note>/')
 def delete_note(id_note):
@@ -188,7 +192,6 @@ def details(id_note):
 @app.route('/logout/')
 @login_required
 def logout():
-    query = db_instance.session.query(User).filter(User.id_user == 1)
     logout_user()
     return "You are logout!"
 

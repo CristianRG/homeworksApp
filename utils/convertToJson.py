@@ -4,11 +4,15 @@ def convertToJsonHomework(ObjectsTuple):
     
         ]
         
-        for homework, userHomework in ObjectsTuple:
+        for homework in ObjectsTuple:
             homeworks.append({'id':homework.id_homework, 'subject':homework.subject, 'title':homework.title, 'description': homework.description,
-                            'status': homework.status, 'drafting_date': userHomework.drafting_date, 'deadline': userHomework.deadline})
+                            'status': homework.status, 'drafting_date': homework.drafting_date, 'deadline': homework.deadline})
         
-    return homeworks
+        if (len(homeworks) > 0):
+            return homeworks
+        
+    return []
+        
 
 def convertToJsonUsers(ObjectsTuple):
     if ObjectsTuple:
@@ -17,4 +21,7 @@ def convertToJsonUsers(ObjectsTuple):
         for user in ObjectsTuple:
             usersList.append(user.username)
             
-    return usersList
+        if (len(usersList) > 0):
+            return usersList
+        
+    return []

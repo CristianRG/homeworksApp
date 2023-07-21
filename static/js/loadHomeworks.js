@@ -1,4 +1,5 @@
 let index = 0;
+let homeworks = []
 const MIN = 1;
 let MAX = 1;
 let date = new Date();
@@ -7,11 +8,13 @@ let month = date.getMonth()+1
 let year = date.getFullYear()
 let today = false;
 let tomorrow = false;
+let future = false;
+let past = false;
 
 window.addEventListener('DOMContentLoaded', async ()=> {
     const response = await fetch('/api/v1/homeworks');
     const data = await response.json();
-    let homeworks = data;
+    homeworks = data;
     homeworks = listHomeworks(homeworks);
     MAX = homeworks.length;
     renderHomeworks(homeworks);
@@ -24,7 +27,7 @@ function listHomeworks(homeworkList){
     const newList = [];
 
     homeworkList['today'].forEach(element => {
-        if(homework.length < 8){
+        if(homework.length < 5){
             homework.push(element);
         }else{
             newList.push(homework);
@@ -32,7 +35,23 @@ function listHomeworks(homeworkList){
         }
     });
     homeworkList['tomorrow'].forEach(element => {
-        if(homework.length < 8){
+        if(homework.length < 5){
+            homework.push(element);
+        }else{
+            newList.push(homework);
+            homework = [];
+        }
+    });
+    homeworkList['future'].forEach(element => {
+        if(homework.length < 5){
+            homework.push(element);
+        }else{
+            newList.push(homework);
+            homework = [];
+        }
+    });
+    homeworkList['past'].forEach(element => {
+        if(homework.length < 5){
             homework.push(element);
         }else{
             newList.push(homework);
@@ -56,37 +75,78 @@ function renderHomeworks(homeworks){
             const elementIntoHomework = document.createElement("div")
             const elementStatus = document.createElement('div');
             const elementDate = document.createElement('h2')
+            const elementIntoStatus = document.createElement('div')
             elementHomework.classList = 'card'
             elementIntoHomework.classList = "To-do"
             elementStatus.classList = "status";
+            elementIntoStatus.classList = 'circle_status'
+            elementIntoStatus.id = element.id
+            
             elementIntoHomework.id = element.id
 
             let fecha = element.deadline;
+            
             fecha = fecha.split(' ');
+            let dayHomework = parseInt(fecha[1])
+            // console.log(parseInt(dayHomework))
+            // console.log(day)
+            // console.log(dayHomework > day)
+            
             let dateHomework = `${fecha[3]}-${date.getUTCMonth(fecha[2])+1}-${fecha[1]}`
+            
 
-            if(dateHomework == `${year}-${month}-0${day}` && today == false){
+            if(day.length < 2){
+                day = parseInt(`0${day}`)
+            }
+
+            let fullDateToday = `${year}-${month}-${day}`
+            let fullDateTomorrow = `${year}-${month}-${day+1}`
+            
+
+            if(dateHomework == fullDateToday && today == false){
                 elementDate.innerHTML = `<h2>Today</h2>`;
                 homeworkList.append(elementDate);
                 today = true;
             }
-            else if(dateHomework == `${year}-${month}-0${day+1}` && tomorrow == false){
+            else if(dateHomework == fullDateTomorrow && tomorrow == false){
                 elementDate.innerHTML = `<h2>Tomorrow</h2>`;
                 homeworkList.append(elementDate);
                 tomorrow = true;
             }
+            else if(dayHomework > day+1 && future == false){
+                elementDate.innerHTML = `<h2>Future</h2>`
+                homeworkList.append(elementDate);
+                future = true;
+            }
+            else if(dayHomework < day && past == false){
+                elementDate.innerHTML = `<h2>Past</h2>`
+                homeworkList.append(elementDate);
+                past = true;
+            }
 
             elementIntoHomework.innerHTML = `
             <p class='text-todo' id='${element.id}'>${element.subject} - ${element.title}</p>
-            <br>
+            
             <p class='text-todo' id='${element.id}'>${element.description}</p>
             `
-            elementStatus.innerHTML = `
-            <div class='circle_status'>
-            </div>
-            `
+            if (element.status == 0){
+                elementIntoStatus.style.borderColor = 'green'
+            }else{
+                elementIntoStatus.style.borderColor = 'red'
+            }
+
+            elementIntoHomework.addEventListener("click", (e)=> {
+                const id = e.target.getAttribute("id");
+                editHomework(id)
+            })
+
+            elementStatus.addEventListener('click', (e)=> {
+                const id = e.target.getAttribute("id");
+
+            })
 
             elementHomework.append(elementIntoHomework)
+            elementStatus.append(elementIntoStatus)
             elementHomework.append(elementStatus)
 
             // elementHomework.innerHTML = `
@@ -98,10 +158,6 @@ function renderHomeworks(homeworks){
             //     </div>
             // </div>
             // `;
-            elementIntoHomework.addEventListener("click", (e)=> {
-                const id = e.target.getAttribute("id");
-                editHomework(id)
-            })
             
             homeworkList.append(elementHomework)
 
@@ -126,6 +182,7 @@ nextPage.addEventListener('click', () => {
         index++;
         today = false;
         tomorrow = false;
+        future = false;
         renderHomeworks(homeworks);
         renderPagination();
     }
@@ -144,6 +201,7 @@ beforePage.addEventListener('click', () => {
         index--;
         today = false;
         tomorrow = false;
+        future = false;
         renderHomeworks(homeworks);
         renderPagination();
     }
@@ -180,11 +238,13 @@ async function editHomework(id){
 
     const windowEdit = document.querySelector("#windowEdit");
 
+    let id_homework = document.getElementById('homework')
     let subject = document.getElementById('subject');
     let title = document.getElementById('title');
     let description = document.getElementById('description');
     // document.getElementById('deadline').value = "2023-05-09";
 
+    id_homework.value = homework.id;
     subject.value = homework.subject;
     title.value = homework.title;
     description.value = homework.description;
@@ -197,7 +257,16 @@ async function editHomework(id){
         buttonClose.addEventListener("click", ()=> {
         windowEdit.style.visibility = "hidden"
     })
+}
 
+async function changeStatus(id){
+    const element = await fetch(`/api/v1/homework/${id}`);
+    const data = await element.json();
+    const homework = data[0];
+
+    let status = document.getElementById(id)
     
-    console.log(deadline.value)
+    const response = await fetch(`/edit/${id}`,{
+        method: 'POST'
+    })
 }
