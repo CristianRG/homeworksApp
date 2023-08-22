@@ -9,13 +9,26 @@ html{
 	background-image: radial-gradient(circle at 87.5% 12.5%, #ef33f6 0, #c630e6 16.67%, #9a2ad2 33.33%, #6d22b9 50%, #3e1a9f 66.67%, #001386 83.33%, #000d70 100%);
 }
 
-body{
+/* body{
     width: 0;
     height: 0;
+} */
+
+.container {
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    left: 50%;
+    height: 50%;
+    /* transform: translate(-50%, -50%); */
 }
+
 .main{
     width: 50%;
     height: 70vh;
+    position: absolute;
+    /* top: 50%;
+    left: 50%; */
 }
 
 .main .messages_server {

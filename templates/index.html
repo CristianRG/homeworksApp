@@ -3,60 +3,79 @@
 {% block body %}
 <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}">
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-{% for message in messages %}
-<ul>{{ message }}</ul>
-{% endfor %}
-{% endif %}
-{% endwith %}
-
-<div class="main-page">
-	<div class="headerList">
-		<h1>To-do List</h1>
-	</div>
-	<div class="tasks">
-
+<header>
+	<div class="logo">
 
 	</div>
+</header>
 
-	<div class="footer">
-		<div class="pagination">
-			<button class="before" id="before-page"><</button>
-				<div class="pagina">
-	
+<section>
+	<div class="status-cards">
+		<div class="card" id="asigned"></div>
+		<div class="card" id="completed"></div>
+		<div class="card" id="remaining"></div>
+	</div>
+	<div class="container-tasks">
+		<div class="add-task">
+			<h5>MY TASKS</h5>
+			<button id="new-task">NEW TASK</button>
+		</div>
+		<nav>
+			<button id="today">TODAY</button>
+			<button id="coming">COMING</button>
+			<button id="missing">MISSING</button>
+		</nav>
+		<div class="tasks" id="tasks">
+			<div class="task">
+				<div class="info-task">
+					<h2>Matematicas</h2>
+					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione sapiente voluptates ipsam qui nobis
+						ullam. Pariatur blanditiis ex error fugiat accusamus, voluptates nulla sed accusantium, quos, omnis 
+						praesentium consequuntur eveniet.
+					</p>
 				</div>
-			<button class="next" id="next-page">></button>
-		</div>
-		<div class="add_todo">
-			<button class="add_task" id="add_task">ADD</button>
+				<div class="date-options">
+					<div class="dead-line">
+						TODAY
+					</div>
+					<div class="options">
+						<span class="material-symbols-outlined">
+							check_box
+						</span>
+						<span class="material-symbols-outlined">
+							stylus
+						</span>
+						<span class="material-symbols-outlined">
+							delete_forever
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="task">
+
+			</div>
+
+			<div class="task">
+
+			</div>
+			<div class="task">
+				
+			</div>
 		</div>
 	</div>
+</section>
 
-		<dialog id="windowModal">
-			<p class="close">X</p>
-			<form method="post" class="form-modal" action="/add/">
-				<input type="text" placeholder="subject" name="subject" class="subject" required autocomplete="off">
-				<input type="text" placeholder="title" name="title" class="title" required>
-				<textarea name="description" id="" cols="30" rows="10" class="description"></textarea>
-				<input type="date" name="deadline" id="deadline" class="deadline" required>
-				<button type="submit" id="add_close">ADD</button>
-			</form>
-		</dialog>
+<div class="slide-var">
+	<div class="account">
+		
+	</div>
+	<div class="progress">
 
-		<dialog id="windowEdit">
-			<p class="close" id="close-edit">X</p>
-			<form method="post" class="form-modal" action="/edit/">
-				<input type="hidden" id="homework" name="id_homework">
-				<input type="text" placeholder="subject" name="subject" class="subject" required autocomplete="off" id="subject">
-				<input type="text" placeholder="title" name="title" class="title" required id="title">
-				<textarea name="description" id="description" cols="30" rows="10" class="description"></textarea>
-				<input type="date" name="deadline" id="deadline" class="deadline" required min="{{today}}" value="{{today}}">
-				<button type="submit" id="add_close">Update</button>
-			</form>
-		</dialog>
+	</div>
+	<div class="logout">
+		<button>Log out</button>
+	</div>
 </div>
-<script type="text/javascript" src="{{url_for('static', filename='js/modal_add_hk.js')}}"></script>
-<script type="text/javascript" src="{{url_for('static', filename='js/loadHomeworks.js')}}"></script>
-<!-- <script async type="text/javascript" src="{{url_for('static', filename='js/todo_clicks.js')}}"></script> -->
+<script src="{{url_for('static', filename='js/stylesIndex.js')}}"></script>
+<script src="{{url_for('static', filename='js/loadTasks.js')}}"></script>
 {% endblock %}

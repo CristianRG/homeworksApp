@@ -47,7 +47,11 @@ def index():
 @app.route('/home/', methods = ['POST', 'GET'])
 @login_required
 def home():
-    
+    id_task = generateUUID()
+    homework = Homework(id_task, current_user.id_user, "mate", "simon", "efe", False, datetime.date.today(), datetime.date.today())
+    db_instance.session.add(homework)
+        
+    db_instance.session.commit()
     return render_template('index.html', today=datetime.date.today())
 
 # ruta para loggear a un usuario
@@ -152,7 +156,7 @@ def add_homework():
         description = request.form['description']
         deadline = request.form['deadline']
         id_task = generateUUID()
-        homework = Homework(id_task, current_user.id_user, subject, title, description, False, datetime.date.today(), deadline)
+        homework = Homework(id_task, current_user.id_user, "mate", "simon", "efe", False, datetime.date.today(), datetime.date.today())
         db_instance.session.add(homework)
         
         db_instance.session.commit()

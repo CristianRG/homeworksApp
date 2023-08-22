@@ -1,277 +1,195 @@
-.main-page {
-	width: 50%;
-	height: 80vh;
-	position: relative;
-	background: #dfdfdf;
-	/* border-right: 1px solid black;
-	border-left: 1px solid black; */
-    box-shadow: -8px 7px 22px -4px rgba(0,0,0,0.75);
+* {
+	font-family: 'Roboto', sans-serif;
 }
 
-
-.headerList{
-	/* margin-top: 1rem; */
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	/* grid-template-rows: repeat(2, 1fr); */
-	border-bottom: 1px solid black;
-	padding: 1rem;
-	/* justify-content: center;
-	align-items: center; */
+body{
+	height: 100vh;
+	background-image: radial-gradient(circle at 87.5% 12.5%, #ef33f6 0, #c630e6 16.67%, #9a2ad2 33.33%, #6d22b9 50%, #3e1a9f 66.67%, #001386 83.33%, #000d70 100%);
 }
 
-
-h1{
-	grid-column: 3;
-	text-align: center;
-	font-size: 30px;
-	font-weight: bold;
-	font-family: Arial;
-	
-}
-
-/* .add_task{
-	width: 5rem;
-	height: 2rem; */
-	/* width: 1rem;
-	height: .5rem; */
-	/* background: blueviolet;
-	padding: 2px;
-	font-size: 15px;
-	font-family: Arial;
-	border: 0px solid transparent;
-	border-radius: 2px;
-	outline: none; with this you can remove a border for inputs and buttons */
-	/* display: block; */
-	/* grid-row: 2;
+header{
+	width: 99.5%;
+	height: 100%;
+	border-radius: 3px;
+	background: white;
 	grid-column: 1;
-} */
-
-.tasks{
-	margin-top: 5px;
-	padding: 10px;
-	padding-right: 0px;
+	border: 1px solid rgba(0, 0, 0, 0.575);
 }
 
-h2{
-	font-size: 20px;
-	font-weight: bold;
-	font-family: Arial;
+section{
+	width: 99.5%;
+	height: calc(99.8% - 2px);
+	border-radius: 3px;
+	/* background: green; */
+	background: white;
+	grid-column: 1;
+	margin-top: 5px;
+	border: 1px solid rgba(0, 0, 0, 0.575);
+}
+
+.slide-var{
+	width: 100%;
+	height: 100%;
+	background: white;
+	border-radius: 3px;
+	grid-area: 1 / 2 / 3 / 3;
+	border: 1px solid rgba(0, 0, 0, 0.575);
+}
+
+.status-cards {
+	width: 100%;
+	height: 30%;
+	display: flex;
+	flex-wrap: nowrap;
+	gap: 2rem;
+	justify-content: center;
+	align-items: center;
 }
 
 .card{
-	/* gap: 1rem; */
-	width: 100%;
-	display: flex;
-	flex-wrap: nowrap;
-	align-content: center;
-	margin-top: .5rem;
+	width: 30%;
+	height: 90%;
+	background: red;
 }
 
-.To-do {
+.container-tasks{
+	width: 100%;
+	height: 70%;
+	background: white;
+}
+
+.add-task{
+	/* width: 100%; */
+	height: 5%;
 	/* display: flex; */
-	flex-wrap: nowrap;
-	width: 90%;
-	height: auto;
-	background: rgb(255, 141, 48);
-	color: white;
-	align-items: center;
-	/* justify-content: center; */
-	padding-left: 5px;
-	border-radius: 5px;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
+	padding: 5px;
 }
 
-.add_todo{
-	width: 100%;
-	display: flex;
-	height: 4rem;
-	justify-content: center;
-	align-items: center;
+.add-task h5{
+	display: inline;
+}
+
+.add-task button{
+	position: relative;
+	right: 10px;
+	margin-left: auto;
+	/* position: relative;
+	left: 90%;
+	transform: translate(-90%, 0); */
+	
+}
+
+#new-task{
+	background: #3e1a9f;
+	color: white;
+}
+
+nav {
+	height: 5%;
+	padding: 5px;
+}
+
+.tasks{
+	height: calc(90% - 27px);
 	/* background: red; */
+	display: flex;
+	flex-wrap: wrap;
+	row-gap: 5px;
+	padding-left: 5px;
+	overflow-y: scroll;
+	padding-top: 5px;
+	margin-bottom: 5px;
+	margin-top: 2px;
 }
 
-.add_task{
-	width: 4rem;
-	height: 2rem;
-	font-family: Arial, Helvetica, sans-serif;
+
+.task{
+	width: 98%;
+	height: 48%;
+	border-radius: .5rem;
+	background: #109175e7;
+	/* display: flex; */
 	color: white;
-	background: #200ae7;
-	border: transparent;
-	border-radius: 5px;
+	display: grid;
+	grid-template-columns: 85% 15%;
 }
 
-.status {
-	width: 10%;
-	height: 100%;
-	/* border-radius: 50%; */
-	/* background: green; */
-	display: flex;
-	float: right;
-	justify-content: center;
-	align-items: center;
+.info-task{
+	width: calc(100% - 12px);
+	height: fit-content;
+	text-align: justify;
+	padding: 6px;
+	display: inline-block;
+	grid-column: 1;
 }
 
-.circle_status{
-	width: 2rem;
-	height: 2rem;
-	border-radius: 50%;
-	border: 1px red solid;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+.info-task h2{
+	margin-bottom: 1rem;
 }
 
-.footer{
-	width: auto;
-	height: auto;
-	position: absolute;
-	bottom: 0px;
-	left: 50%;
-	transform: translateX(-50%);
-	/* transform: translate(-50%, -50%); */
-}
-
-.pagination{
-	width: 100%;
-	height: auto;
-	/* background: green; */
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 1px;
-}
-
-/* .pages {
-	display: flex;
-	list-style: none;
-	gap: 1rem;
-}
-
-.pages li {
-	width: 1rem;
-	height: 1rem;
-	text-align: center;
-	border-radius: 3px;
-	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-}
-
-.pages li a {
-	text-decoration: none;
-	color: black;
-	font-weight: bold;
+/* .info-task p{
+	width: 75%;
 } */
 
-.before, .next {
-	width: 1rem;
-	height: 1rem;
-	background: white;
-	border: transparent;
-	font-family: Arial, Helvetica, sans-serif;
-	font-weight: bold;
-	border-radius: 1px;
-	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-}
-
-.pagina {
-	width: 1rem;
-	height: 1rem;
-	background: white;
-	text-align: center;
-	font-family: Arial, Helvetica, sans-serif;
-	font-weight: bold;
-	border-radius: 1px;
-	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-}
-
-#windowModal{
-	width: 40%;
-	height: auto;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	display: flex;
-	justify-content: center;
-	border: 2px solid rgba(3, 40, 247, 0.75);
-	border-radius: 3px;
-	visibility: hidden;
-	padding: 1rem;
-}
-
-#windowModal::backdrop{
-	background-color: rgba(0,0,0,0.9);
-}
-
-#windowModal .close {
-	position: absolute;
-	right: 5px;
-	top: 5px;
-	font-family: Arial, Helvetica, sans-serif;
-}
-
-#windowModal .close:hover{
-	cursor: pointer;
-	color: red;
-}
-
-.form-modal{
-	/* width: 70%; */
-	/* display: flex; */
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	/* flex-wrap: nowrap; */ 
-	/* justify-content: center; */
-}
-
-.form-modal input, .form-modal textarea, .form-modal button {
+.date-options{
 	grid-column: 2;
 }
 
-.form-modal textarea {
-	resize: none;
+.dead-line{
+	width: calc(100% - 12px);
+	height: fit-content;
+	padding: 6px;
+	text-align: right;
 }
 
-#windowEdit{
-	width: 40%;
-	height: auto;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+.options{
+	width: 100%;
+	height: 20%;
+	position: relative;
+	top: 75%;
+	transform: translate(0, -75%);
 	display: flex;
-	justify-content: center;
-	border: 2px solid rgba(3, 40, 247, 0.75);
-	border-radius: 3px;
-	visibility: hidden;
-	padding: 1rem;
+	align-items: center;
+	justify-content: space-around;
 }
 
-#windowEdit::backdrop{
-	background-color: rgba(0,0,0,0.9);
-}
-
-#windowEdit .close {
+.logout{
+	padding: .1rem;
+	background: gray;
 	position: absolute;
-	right: 5px;
-	top: 5px;
-	font-family: Arial, Helvetica, sans-serif;
+	bottom: 0px;
+	border-radius: 3px;
+	margin-left: 3px;
+	margin-bottom: 3px;
 }
 
-#windowEdit .close:hover{
+button{
+	width: 5rem;
+	font-family: 'Roboto', sans-serif;
+	font-weight: bold;
+	padding: 5px;
+	border-radius: 3px;
+	border: 1px solid rgba(0, 0, 0, 0.575);
+}
+
+.active {
+	color: white;
+	background: rgb(117, 7, 7);
+}
+
+button:hover{
 	cursor: pointer;
-	color: red;
 }
 
-.form-modal{
-	/* width: 70%; */
-	/* display: flex; */
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	/* flex-wrap: nowrap; */ 
-	/* justify-content: center; */
+.logout button{
+	width: 4rem;
+	border: none;
+	background: none;
 }
 
-.form-modal input, .form-modal textarea, .form-modal button {
-	grid-column: 2;
-}
-
-.form-modal textarea {
-	resize: none;
+.logout button:hover{
+	cursor: pointer;
 }
