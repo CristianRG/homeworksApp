@@ -2,8 +2,16 @@ let tasks = {};
 
 // obtenemos el json con tareas desde la api
 async function getTasks(){
-    let listTasks = await fetch('../api/v1/homeworks/');
-    tasks = await listTasks.json();
+
+    try {
+        let listTasks = await fetch('../api/v1/homeworks/');
+        tasks = await listTasks.json();
+
+    } catch (error) {
+        console.log('Error '+error);
+        return {error: "Content not avaliable"};
+    }
+
 }
 
 
@@ -37,11 +45,16 @@ function getTasksPerDay(day){
 function loadTasks(listTasks){
     let content = '';
     if(listTasks.length == 0){
-        document.getElementById('tasks').innerHTML = `<div class="no-task">No hay ninguna tarea para mostrar</div>`;
+        document.getElementById('tasks').innerHTML = `  <div class="no-task">
+                                                            <i class="fi fi-rs-sparkles"></i>
+                                                            Any task yet!
+                                                        </div>`;
     }else{
         // iteramos sobre cada una de las tareas para agregarlas al div
         listTasks.forEach(element => {
-            content += `<div class="task">
+            // comprobamos si las tareas ya fueron realizadas. true para terminadas y false para pendientes
+            if (element.status == false){
+                content += `<div class="task">
                             <div class="info-task">
                                 <h2>${element.title}</h2>
                                 <p>
@@ -65,10 +78,27 @@ function loadTasks(listTasks){
                                 </div>
                             </div>
                         </div>`
+            }
+            
         });
-        document.getElementById('tasks').innerHTML = content;
+        if(content == ''){
+            document.getElementById('tasks').innerHTML = `  <div class="no-task">
+                                                            <i class="fi fi-rs-sparkles"></i>
+                                                            Any task yet!
+                                                        </div>`;    
+        }else{
+            document.getElementById('tasks').innerHTML = content;
+        }
     }
 };
+
+// actualizamos los contadores de tareas
+function updateCountTasks(){
+    let totalAsigned = getTasksList().length;
+    let totalRemaining = getTasksPerDay('past').length;
+    document.getElementById('total-asigned').innerHTML = totalAsigned;
+    document.getElementById('total-remaining').innerHTML = totalRemaining;
+}
 
 // agregamos un escuchador de eventos a los botones para identificar cual ha sido clickeado
 const buttonsDay = document.querySelectorAll('nav button');
@@ -86,7 +116,7 @@ buttonsDay.forEach(button => {
                 listTasks = getTasksPerDay('tomorrow');    
                 break;
             case 'missing':
-                listTasks = getTasksPerDay('future');
+                listTasks = getTasksPerDay('past');
                 break;
         };
         loadTasks(listTasks);
@@ -95,5 +125,31 @@ buttonsDay.forEach(button => {
 
 // cuando cargue el documento deberá ejecutar primero algunas cosas
 document.addEventListener('DOMContentLoaded', ()=>{
+
+
+
     getTasks();
-})
+
+    // intervalo para verificar si se ha obtenido correctamente las tareas
+    let intervalTime = 0;
+    const loadingTasks = setInterval(function(){
+        try {
+            loadTasks(getTasksPerDay('today'));
+            updateCountTasks();
+            clearInterval(loadingTasks);
+        } catch (error) {
+            // console.log('Error... Reintentando...');
+            intervalTime++;
+        }
+
+        if(intervalTime > 5){
+            // alert('Error al obtener los datos...');
+            clearInterval(loadingTasks);
+        }
+    }, 200);
+
+    // setTimeout(()=>{
+    //     loadTasks(getTasksPerDay('today'));
+    //     updateCountTasks();
+    // }, 1000);  
+});

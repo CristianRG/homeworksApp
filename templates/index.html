@@ -11,9 +11,24 @@
 
 <section>
 	<div class="status-cards">
-		<div class="card" id="asigned"></div>
-		<div class="card" id="completed"></div>
-		<div class="card" id="remaining"></div>
+		<div class="card" id="asigned">
+			<h2>ASIGNED</h2>
+			<div class="total-tasks" id="total-asigned">
+				0
+			</div>
+		</div>
+		<div class="card" id="completed">
+			<h2>COMPLETED</h2>
+			<div class="total-tasks" id="total-completed">
+				0
+			</div>
+		</div>
+		<div class="card" id="remaining">
+			<h2>REMAINING</h2>
+			<div class="total-tasks" id="total-remaining">
+				0
+			</div>
+		</div>
 	</div>
 	<div class="container-tasks">
 		<div class="add-task">
@@ -26,40 +41,10 @@
 			<button id="missing">MISSING</button>
 		</nav>
 		<div class="tasks" id="tasks">
-			<div class="task">
-				<div class="info-task">
-					<h2>Matematicas</h2>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione sapiente voluptates ipsam qui nobis
-						ullam. Pariatur blanditiis ex error fugiat accusamus, voluptates nulla sed accusantium, quos, omnis 
-						praesentium consequuntur eveniet.
-					</p>
-				</div>
-				<div class="date-options">
-					<div class="dead-line">
-						TODAY
-					</div>
-					<div class="options">
-						<span class="material-symbols-outlined">
-							check_box
-						</span>
-						<span class="material-symbols-outlined">
-							stylus
-						</span>
-						<span class="material-symbols-outlined">
-							delete_forever
-						</span>
-					</div>
-				</div>
-			</div>
-			<div class="task">
-
-			</div>
-
-			<div class="task">
-
-			</div>
-			<div class="task">
-				
+			<div class="lds-facebook">
+				<div></div>
+				<div></div>
+				<div></div>
 			</div>
 		</div>
 	</div>
@@ -67,7 +52,7 @@
 
 <div class="slide-var">
 	<div class="account">
-		
+
 	</div>
 	<div class="progress">
 
@@ -75,6 +60,22 @@
 	<div class="logout">
 		<button>Log out</button>
 	</div>
+</div>
+
+<div class="modal-add-task" id="modal-window">
+	<h2>NEW TASK</h2>
+	<form action="/add/" method="post">
+		<label for="title">TITLE</label>
+		<input type="text" name="title" id="title" />
+		<label for="due-date">DUE DATE</label>
+		<input type="date" name="deadline" id="due-date" />
+		<label for="description">DESCRIPTION</label><br />
+		<textarea id="description" name="description"></textarea>
+		<div class="buttons-new-task">
+			<button type="submit" id="add-new">AGREGAR</button>
+			<button id="cancel">CANCELAR</button>
+		</div>
+	</form>
 </div>
 <script src="{{url_for('static', filename='js/stylesIndex.js')}}"></script>
 <script src="{{url_for('static', filename='js/loadTasks.js')}}"></script>

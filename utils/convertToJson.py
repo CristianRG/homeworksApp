@@ -5,7 +5,7 @@ def convertToJsonHomework(ObjectsTuple):
         ]
         
         for homework in ObjectsTuple:
-            homeworks.append({'id':homework.id_homework, 'subject':homework.subject, 'title':homework.title, 'description': homework.description,
+            homeworks.append({'id':homework.id_homework, 'title':homework.title, 'description': homework.description,
                             'status': homework.status, 'drafting_date': homework.drafting_date, 'deadline': homework.deadline})
         
         if (len(homeworks) > 0):

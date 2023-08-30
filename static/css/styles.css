@@ -2,12 +2,12 @@
 	font-family: 'Roboto', sans-serif;
 }
 
-body{
+body {
 	height: 100vh;
 	background-image: radial-gradient(circle at 87.5% 12.5%, #ef33f6 0, #c630e6 16.67%, #9a2ad2 33.33%, #6d22b9 50%, #3e1a9f 66.67%, #001386 83.33%, #000d70 100%);
 }
 
-header{
+header {
 	width: 99.5%;
 	height: 100%;
 	border-radius: 3px;
@@ -16,7 +16,7 @@ header{
 	border: 1px solid rgba(0, 0, 0, 0.575);
 }
 
-section{
+section {
 	width: 99.5%;
 	height: calc(99.8% - 2px);
 	border-radius: 3px;
@@ -27,7 +27,7 @@ section{
 	border: 1px solid rgba(0, 0, 0, 0.575);
 }
 
-.slide-var{
+.slide-var {
 	width: 100%;
 	height: 100%;
 	background: white;
@@ -46,43 +46,68 @@ section{
 	align-items: center;
 }
 
-.card{
+.card {
 	width: 30%;
 	height: 90%;
 	background: red;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
-.container-tasks{
+.card h2 {
+	/* display: block;
+	width: 100%; */
+}
+
+#asigned {
+	background: #16a4c7ea;
+}
+
+#completed {
+	background: #08db79c5;
+}
+
+#remaining {
+	background: #f0b3d8e6;
+}
+
+.total-tasks {
+	font-size: 30px;
+}
+
+.container-tasks {
 	width: 100%;
 	height: 70%;
 	background: white;
 }
 
-.add-task{
+.add-task {
 	/* width: 100%; */
 	height: 5%;
 	/* display: flex; */
 	display: flex;
-    justify-content: space-between;
-    align-items: center;
+	justify-content: space-between;
+	align-items: center;
 	padding: 5px;
 }
 
-.add-task h5{
+.add-task h5 {
 	display: inline;
 }
 
-.add-task button{
+.add-task button {
 	position: relative;
 	right: 10px;
 	margin-left: auto;
 	/* position: relative;
 	left: 90%;
 	transform: translate(-90%, 0); */
-	
+
 }
 
-#new-task{
+#new-task {
 	background: #3e1a9f;
 	color: white;
 }
@@ -92,7 +117,7 @@ nav {
 	padding: 5px;
 }
 
-.tasks{
+.tasks {
 	height: calc(90% - 27px);
 	/* background: red; */
 	display: flex;
@@ -106,7 +131,7 @@ nav {
 }
 
 
-.task{
+.task {
 	width: 98%;
 	height: 48%;
 	border-radius: .5rem;
@@ -117,7 +142,7 @@ nav {
 	grid-template-columns: 85% 15%;
 }
 
-.info-task{
+.info-task {
 	width: calc(100% - 12px);
 	height: fit-content;
 	text-align: justify;
@@ -126,7 +151,7 @@ nav {
 	grid-column: 1;
 }
 
-.info-task h2{
+.info-task h2 {
 	margin-bottom: 1rem;
 }
 
@@ -134,18 +159,18 @@ nav {
 	width: 75%;
 } */
 
-.date-options{
+.date-options {
 	grid-column: 2;
 }
 
-.dead-line{
+.dead-line {
 	width: calc(100% - 12px);
 	height: fit-content;
 	padding: 6px;
 	text-align: right;
 }
 
-.options{
+.options {
 	width: 100%;
 	height: 20%;
 	position: relative;
@@ -156,7 +181,28 @@ nav {
 	justify-content: space-around;
 }
 
-.logout{
+/* En caso de no haber tareas se aplicaran estos estilos a un div */
+
+.no-task {
+	width: 50%;
+	height: fit-content;
+	color: #000d70;
+	font-weight: bold;
+	position: relative;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 20px;
+	text-align: center;
+	opacity: .5;
+}
+
+.no-task i {
+	font-size: 40px;
+	display: block;
+}
+
+.logout {
 	padding: .1rem;
 	background: gray;
 	position: absolute;
@@ -166,7 +212,7 @@ nav {
 	margin-bottom: 3px;
 }
 
-button{
+button {
 	width: 5rem;
 	font-family: 'Roboto', sans-serif;
 	font-weight: bold;
@@ -180,16 +226,125 @@ button{
 	background: rgb(117, 7, 7);
 }
 
-button:hover{
+button:hover {
 	cursor: pointer;
 }
 
-.logout button{
+.logout button {
 	width: 4rem;
 	border: none;
 	background: none;
 }
 
-.logout button:hover{
+.logout button:hover {
 	cursor: pointer;
+}
+
+.modal-add-task {
+	width: 35%;
+	height: 50%;
+	background: black;
+	color: white;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	display: none;
+}
+
+.modal-add-task h2 {
+	position: absolute;
+	top: 10px;
+}
+
+
+
+.modal-add-task form {
+	width: 80%;
+	height: fit-content;
+	margin-top: 1.5rem;
+
+}
+
+.modal-add-task label {
+	display: block;
+	margin-top: .5rem;
+}
+
+.modal-add-task input {
+	width: 100%;
+}
+
+.modal-add-task textarea {
+	width: 100%;
+	height: 7rem;
+	resize: none;
+}
+
+.modal-add-task .buttons-new-task {
+	width: 100%;
+	height: fit-content;
+	display: flex;
+	justify-content: center;
+	gap: 5px;
+}
+
+#add-new {
+	background: #0a6111;
+}
+
+#cancel {
+	background: #9e3b4c;
+}
+
+/* animaciones de pantalla de carga */
+.lds-facebook {
+	display: inline-block;
+	position: relative;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 80px;
+	height: 80px;
+}
+
+.lds-facebook div {
+	display: inline-block;
+	position: absolute;
+	left: 8px;
+	width: 16px;
+	background: #037192;
+	animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+
+.lds-facebook div:nth-child(1) {
+	left: 8px;
+	animation-delay: -0.24s;
+}
+
+.lds-facebook div:nth-child(2) {
+	left: 32px;
+	animation-delay: -0.12s;
+}
+
+.lds-facebook div:nth-child(3) {
+	left: 56px;
+	animation-delay: 0;
+}
+
+@keyframes lds-facebook {
+	0% {
+		top: 8px;
+		height: 64px;
+	}
+
+	50%,
+	100% {
+		top: 24px;
+		height: 32px;
+	}
 }
